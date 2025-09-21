@@ -14,7 +14,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const { NODE_ENV = "development", SESSION_SECRET = "dev-change-me" } = process.env;
+const { NODE_ENV = "development", GOOGLE_CLIENT_SECRET = "dev-change-me" } = process.env;
 
 const isProd = NODE_ENV === "production";
 
@@ -43,7 +43,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
     name: "sid",
-    secret: SESSION_SECRET,
+    secret: GOOGLE_CLIENT_SECRET,
     resave: false,
     saveUninitialized: false,
     proxy: true,
