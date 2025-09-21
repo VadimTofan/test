@@ -9,22 +9,20 @@ const AuthContext = createContext({
   logout: async () => {},
 });
 
-const API_URL = process.env.NEXT_PUBLIC_DB_ACCESS ;
-console.log("API_URL", API_URL);
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   async function refresh() {
     try {
-      const res = await fetch(`${API_URL}/api/me`, {
+      const res = await fetch(`/api/me`, {
         credentials: "include",
         cache: "no-store",
       });
       if (!res.ok) throw new Error("not ok");
       const data = await res.json();
       setUser(data.user || null);
-    } catch (e) {
+    } catch {
       setUser(null);
     } finally {
       setLoading(false);
@@ -33,7 +31,7 @@ export default function AuthProvider({ children }) {
 
   async function logout() {
     try {
-      await fetch(`${API_URL}/auth/logout`, {
+      await fetch(`/auth/logout`, {
         method: "POST",
         credentials: "include",
       });
@@ -46,11 +44,7 @@ export default function AuthProvider({ children }) {
     refresh();
   }, []);
 
-  return (
-    <AuthContext.Provider value={{ user, loading, refresh, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ user, loading, refresh, logout }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

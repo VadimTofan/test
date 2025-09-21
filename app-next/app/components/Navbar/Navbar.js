@@ -9,8 +9,6 @@ import { useAuth } from "@/app/providers";
 import { useState, useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-const API_URL = process.env.NEXT_PUBLIC_DB_ACCESS || "http://localhost:8000";
-
 export default function Navbar() {
   const { user, loading, logout } = useAuth();
 
@@ -61,15 +59,17 @@ export default function Navbar() {
   const handleSignOut = async () => {
     setShowProfileMenu(false);
     try {
-      await fetch(`${API_URL}/auth/logout`, { method: "POST", credentials: "include" });
+      await fetch(`/auth/logout`, { method: "POST", credentials: "include" });
     } catch (_) {}
     await logout();
     router.push("/home");
   };
+
   const handleLoginRedirect = () => {
     localStorage.setItem("returnTo", pathname || "/home");
-    window.location.href = `${API_URL}/auth/google`;
+    window.location.href = `/auth/google`;
   };
+
   return (
     <>
       <nav className={styles.navbar}>
@@ -119,6 +119,7 @@ export default function Navbar() {
           )
         )}
       </nav>
+
       <ul className={styles.navbar__itemsMobile}>
         {navItems.map((item) => (
           <li key={item.name} className={styles.navbar__itemMobile}>

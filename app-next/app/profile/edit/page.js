@@ -8,48 +8,65 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/app/providers";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 export default function SignupPage() {
   const today = new Date().toISOString().slice(0, 10);
   const { user: authUser, loading: status } = useAuth();
-  const [draft, setDraft] = useState({
-    name: "",
-    species: "",
-    sex: "",
-    date_of_birth: today,
-  });
   const isAuthed = !!authUser;
   const email = authUser?.email ?? "";
+  const pathname = usePathname();
+
   const { user } = FetchUserData(email);
+
+  const [draft, setDraft] = useState({
+    full_name: "",
+    phone: "",
+    address: "",
+    date_of_birth: today,
+    passport_number: "",
+  });
+
   const [success, setSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [err, setErr] = useState("");
 
   useEffect(() => {
     if (user) {
       setDraft((prev) => ({
         ...prev,
         ...user,
-        date_of_birth: user.date_of_birth || prev.date_of_birth,
+        date_of_birth: (user.date_of_birth || prev.date_of_birth)?.slice(0, 10),
       }));
     }
   }, [user]);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [err, setErr] = useState("");
-
   const handleGoogle = async () => {
     setErr("");
-    localStorage.setItem("returnTo", pathname || "/profile/edit");
-    window.location.href = `${API_URL}/auth/google`;
+    try {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("returnTo", pathname || "/profile/edit");
+      }
+      if (!API_URL) {
+        throw new Error("Missing NEXT_PUBLIC_API_URL");
+      }
+      window.location.href = `${API_URL}/auth/google`;
+    } catch (e) {
+      setErr(e?.message || "Could not start Google sign-in.");
+    }
   };
 
   const handleSubmit = async () => {
     setIsLoading(true);
-    setErr(null);
+    setErr("");
     try {
       const now = new Date().toISOString();
 
       const res = await api(`/api/users/${email}`, {
         method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...draft,
           email: draft?.email ?? email,
@@ -58,14 +75,20 @@ export default function SignupPage() {
         }),
       });
 
+      if (!res.ok) {
+        const text = await res.text().catch(() => "");
+        throw new Error(text || `Request failed with status ${res.status}`);
+      }
+
       setSuccess(true);
-      setDraft(null);
     } catch (e) {
-      setErr(e.message);
+      setErr(e?.message || "Something went wrong.");
     } finally {
       setIsLoading(false);
     }
   };
+
+  const maxDOB = new Date().toISOString().split("T")[0];
 
   return (
     <section className={styles.signup}>
@@ -77,10 +100,11 @@ export default function SignupPage() {
             <Image className={styles.signup__image} src="/images/pets-signup.png" width={800} height={800} priority alt="Cat and dog looking at a phone" loading="eager" />
           </div>
         </div>
+
         {!success ? (
           <>
             {!isAuthed ? (
-              <button type="button" onClick={handleGoogle} className={styles.signup__google}>
+              <button type="button" onClick={handleGoogle} className={styles.signup__google} disabled={status} aria-busy={status}>
                 <span className={styles.signup__googleIcon}>
                   <Image src="/icons/google.svg" width={25} height={25} alt="Google" />
                 </span>
@@ -90,16 +114,20 @@ export default function SignupPage() {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  handleSubmit();
+                  if (!isLoading) handleSubmit();
                 }}
               >
                 <div className={styles.signup__field}>
+                  <label className={styles.signup__label} htmlFor="full_name">
+                    Full name
+                  </label>
                   <input
+                    id="full_name"
                     className={styles.signup__input}
                     type="text"
-                    name="fullName"
+                    name="full_name"
                     placeholder="Full name"
-                    value={draft?.full_name ?? ""}
+                    value={draft.full_name}
                     onChange={(e) => setDraft({ ...draft, full_name: e.target.value })}
                     autoComplete="name"
                     required
@@ -107,30 +135,41 @@ export default function SignupPage() {
                 </div>
 
                 <div className={styles.signup__field}>
+                  <label className={styles.signup__label} htmlFor="phone">
+                    Phone number
+                  </label>
                   <input
+                    id="phone"
                     className={styles.signup__input}
                     type="tel"
-                    name="mobile"
+                    name="phone"
                     placeholder="Phone Number"
-                    value={draft?.phone ?? ""}
+                    value={draft.phone}
                     onChange={(e) => {
                       const digitsOnly = e.target.value.replace(/\D/g, "");
                       setDraft({ ...draft, phone: digitsOnly });
                     }}
                     autoComplete="tel"
+                    inputMode="numeric"
+                    pattern="^\d{8,15}$"
                     minLength={8}
                     maxLength={15}
                     required
+                    aria-describedby="phoneHelp"
                   />
                 </div>
 
                 <div className={styles.signup__field}>
+                  <label className={styles.signup__label} htmlFor="address">
+                    Address
+                  </label>
                   <input
+                    id="address"
                     className={styles.signup__input}
                     type="text"
                     name="address"
                     placeholder="Address"
-                    value={draft?.address ?? ""}
+                    value={draft.address}
                     onChange={(e) => setDraft({ ...draft, address: e.target.value })}
                     autoComplete="street-address"
                     required
@@ -144,34 +183,43 @@ export default function SignupPage() {
                     className={styles.signup__dobInput}
                     type="date"
                     name="date_of_birth"
-                    value={(draft?.date_of_birth ?? "").slice(0, 10)}
+                    value={draft.date_of_birth}
                     onChange={(e) => setDraft({ ...draft, date_of_birth: e.target.value })}
                     autoComplete="bday"
                     required
-                    max={new Date().toISOString().split("T")[0]}
+                    max={maxDOB}
                   />
                 </div>
 
                 <div className={styles.signup__field}>
+                  <label className={styles.signup__label} htmlFor="passport_number">
+                    Passport Number
+                  </label>
                   <input
+                    id="passport_number"
                     className={styles.signup__input}
                     type="text"
                     name="passport_number"
                     placeholder="Passport Number"
-                    value={draft?.passport_number ?? ""}
-                    onChange={(e) => setDraft({ ...draft, passport_number: e.target.value })}
+                    value={draft.passport_number}
+                    onChange={(e) => setDraft({ ...draft, passport_number: e.target.value.toUpperCase() })}
+                    inputMode="latin"
+                    pattern="^[A-Z0-9]{8}$"
                     minLength={8}
                     maxLength={8}
                     required
                   />
                 </div>
 
-                <button type="submit" className={styles.signup__primary} disabled={isLoading}>
+                <button type="submit" className={styles.signup__primary} disabled={isLoading} aria-busy={isLoading}>
                   {isLoading ? "Saving..." : "Update account"}
                 </button>
+
                 {err && (
                   <p className={styles.signup__fail}>
-                    {err}, please try again later <br />
+                    {err}
+                    <br />
+                    Please try again later.
                   </p>
                 )}
                 <p className={styles.signup__terms}>By continuing, you agree to our Terms and Privacy Policy.</p>

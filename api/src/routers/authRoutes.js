@@ -11,12 +11,13 @@ router.get("/auth/google", passport.authenticate("google", { scope: ["profile", 
 router.get("/auth/google/callback", passport.authenticate("google", { failureRedirect: `${FRONTEND_URL || "/"}` }), async (req, res, next) => {
   try {
     const userInfo = await db.getUserByEmail(req.user.email);
+
     if (!userInfo) {
       // create if needed
     }
-
     req.session.save((err) => {
       if (err) return next(err);
+
       return res.redirect(`${FRONTEND_URL}/home`);
     });
   } catch (e) {
