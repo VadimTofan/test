@@ -1,7 +1,8 @@
 "use client";
 
+import api from "@/lib/api";
+
 import { useState, useEffect } from "react";
-import api from "@/lib/api"; 
 
 export default function useFetchUserPetData(id) {
   const [pets, setPets] = useState(null);

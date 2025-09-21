@@ -10,10 +10,7 @@ export default function Vaccinations({ petId, pageSize = 3 }) {
   const { vaccinations, error, isLoading } = useVaccinationData(petId);
   const [page, setPage] = useState(1);
 
-  const safeVaccinations = useMemo(
-    () => (Array.isArray(vaccinations) ? vaccinations : []),
-    [vaccinations]
-  );
+  const safeVaccinations = useMemo(() => (Array.isArray(vaccinations) ? vaccinations : []), [vaccinations]);
 
   const totalPages = Math.max(1, Math.ceil(safeVaccinations.length / pageSize));
 
@@ -26,12 +23,9 @@ export default function Vaccinations({ petId, pageSize = 3 }) {
     return safeVaccinations.slice(start, start + pageSize);
   }, [safeVaccinations, page, pageSize]);
 
-  // Handle unauthorized (401) explicitly
   if (error === "UNAUTHORIZED") {
     const handleLogin = () => {
-      // return to the pet page after login
       localStorage.setItem("returnTo", `/profile/pets/${petId}`);
-      // If you didn't add Next rewrites, use `${process.env.NEXT_PUBLIC_API_URL}/auth/google`
       window.location.href = "/auth/google";
     };
     return (
@@ -53,18 +47,10 @@ export default function Vaccinations({ petId, pageSize = 3 }) {
         <h1 className={styles.vaccination__title}>Vaccination history</h1>
       </header>
 
-      {isLoading && (
-        <p className={styles.vaccination__loading}>Loading vaccination history…</p>
-      )}
-      {error && error !== "UNAUTHORIZED" && (
-        <p className={styles.vaccination__error}>Error: {error}</p>
-      )}
+      {isLoading && <p className={styles.vaccination__loading}>Loading vaccination history…</p>}
+      {error && error !== "UNAUTHORIZED" && <p className={styles.vaccination__error}>Error: {error}</p>}
 
-      {!isLoading && !error && safeVaccinations.length === 0 && (
-        <p className={styles.vaccination__error}>
-          This pet has no vaccination data.
-        </p>
-      )}
+      {!isLoading && !error && safeVaccinations.length === 0 && <p className={styles.vaccination__error}>This pet has no vaccination data.</p>}
 
       {!isLoading && !error && safeVaccinations.length > 0 && (
         <>
@@ -72,42 +58,21 @@ export default function Vaccinations({ petId, pageSize = 3 }) {
             {current.map((vaccination) => (
               <li key={vaccination.id} className={styles.vaccination__item}>
                 <div className={styles.vaccination__row}>
-                  <h2 className={styles.vaccination__name}>
-                    {vaccination.vaccine_name ||
-                      vaccination.name ||
-                      "Unknown vaccine"}
-                  </h2>
-                  <p>
-                    {formatDate(
-                      vaccination.date_given || vaccination.date_administered
-                    )}
-                  </p>
+                  <h2 className={styles.vaccination__name}>{vaccination.vaccine_name || vaccination.name || "Unknown vaccine"}</h2>
+                  <p>{formatDate(vaccination.date_given || vaccination.date_administered)}</p>
                 </div>
-                {vaccination.next_due && (
-                  <p>Next due: {formatDate(vaccination.next_due)}</p>
-                )}
+                {vaccination.next_due && <p>Next due: {formatDate(vaccination.next_due)}</p>}
                 {vaccination.notes && <p>{vaccination.notes}</p>}
               </li>
             ))}
           </ul>
 
-          <nav
-            className={styles.vaccination__pagination}
-            aria-label="Vaccinations pagination"
-          >
+          <nav className={styles.vaccination__pagination} aria-label="Vaccinations pagination">
             <div className={styles.vaccination__summary}>
-              {(page - 1) * pageSize + 1}–
-              {Math.min(page * pageSize, safeVaccinations.length)} of{" "}
-              {safeVaccinations.length}
+              {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, safeVaccinations.length)} of {safeVaccinations.length}
             </div>
             <div className={styles.vaccination__controls}>
-              <button
-                type="button"
-                className={styles.vaccination__buttonPage}
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page === 1}
-                aria-label="Previous page"
-              >
+              <button type="button" className={styles.vaccination__buttonPage} onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1} aria-label="Previous page">
                 ‹ Prev
               </button>
 
@@ -117,9 +82,7 @@ export default function Vaccinations({ petId, pageSize = 3 }) {
                   <button
                     type="button"
                     key={n}
-                    className={`${styles.vaccination__buttonPage} ${
-                      n === page ? styles.vaccination__isActive : ""
-                    }`}
+                    className={`${styles.vaccination__buttonPage} ${n === page ? styles.vaccination__isActive : ""}`}
                     aria-current={n === page ? "page" : undefined}
                     onClick={() => setPage(n)}
                   >
@@ -128,13 +91,7 @@ export default function Vaccinations({ petId, pageSize = 3 }) {
                 );
               })}
 
-              <button
-                type="button"
-                className={styles.vaccination__buttonPage}
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages}
-                aria-label="Next page"
-              >
+              <button type="button" className={styles.vaccination__buttonPage} onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages} aria-label="Next page">
                 Next ›
               </button>
             </div>

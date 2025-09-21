@@ -1,13 +1,16 @@
 "use client";
 
 import styles from "./Navbar.module.css";
+
 import Image from "next/image";
 import { User } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/app/providers";
 import { useState, useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
+
 const API_URL = process.env.NEXT_PUBLIC_DB_ACCESS || "http://localhost:8000";
+
 export default function Navbar() {
   const { user, loading, logout } = useAuth();
 
@@ -26,10 +29,7 @@ export default function Navbar() {
 
   useEffect(() => {
     function handleClickOutside(e) {
-      if (
-        profileMenuRef.current &&
-        !profileMenuRef.current.contains(e.target)
-      ) {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(e.target)) {
         setShowProfileMenu(false);
       }
     }
@@ -62,7 +62,7 @@ export default function Navbar() {
     setShowProfileMenu(false);
     try {
       await fetch(`${API_URL}/auth/logout`, { method: "POST", credentials: "include" });
-    } catch (_) { }
+    } catch (_) {}
     await logout();
     router.push("/home");
   };
@@ -75,14 +75,7 @@ export default function Navbar() {
       <nav className={styles.navbar}>
         <Link href="/home">
           <div className={styles.navbar__logo}>
-            <Image
-              className={styles.navbar__logoImg}
-              src="/images/logo.png"
-              alt="PetPass Logo"
-              width={50}
-              height={50}
-              priority
-            />
+            <Image className={styles.navbar__logoImg} src="/images/logo.png" alt="PetPass Logo" width={50} height={50} priority />
             <span className={styles.navbar__logoText}>PetPass</span>
           </div>
         </Link>
@@ -100,16 +93,10 @@ export default function Navbar() {
         </div>
 
         {loading ? (
-          <div
-            className={styles.navbar__auth}
-            style={{ width: 120, height: 40 }}
-          />
+          <div className={styles.navbar__auth} style={{ width: 120, height: 40 }} />
         ) : !isAuthed ? (
           <div className={styles.navbar__auth}>
-            <button
-              className={styles.navbar__loginButton}
-              onClick={() => setShowLoginModal(true)}
-            >
+            <button className={styles.navbar__loginButton} onClick={() => setShowLoginModal(true)}>
               <User size={20} />
               <span className={styles.navbar__loginText}>Login</span>
             </button>
@@ -117,27 +104,13 @@ export default function Navbar() {
         ) : (
           profile && (
             <div ref={profileMenuRef} className={styles.navbar__profile}>
-              <Image
-                src={profile}
-                alt="Profile"
-                width={150}
-                height={150}
-                className={styles.navbar__image}
-                onClick={() => setShowProfileMenu((p) => !p)}
-              />
+              <Image src={profile} alt="Profile" width={150} height={150} className={styles.navbar__image} onClick={() => setShowProfileMenu((p) => !p)} />
               {showProfileMenu && (
                 <div className={styles.navbar__dropdown}>
-                  <button
-                    onClick={handleProfileClick}
-                    className={styles.navbar__button}
-                  >
+                  <button onClick={handleProfileClick} className={styles.navbar__button}>
                     Profile
                   </button>
-                  <button
-                    type="button"
-                    onClick={handleSignOut}
-                    className={styles.navbar__button}
-                  >
+                  <button type="button" onClick={handleSignOut} className={styles.navbar__button}>
                     Sign out
                   </button>
                 </div>
@@ -150,19 +123,7 @@ export default function Navbar() {
         {navItems.map((item) => (
           <li key={item.name} className={styles.navbar__itemMobile}>
             <Link href={item.path} className={styles.navbar__linkMobile}>
-              {item.icon ? (
-                <Image
-                  src={item.icon}
-                  alt={item.name}
-                  width={24}
-                  height={24}
-                  className={styles.navbar__iconMobile}
-                />
-              ) : (
-                <span className={styles.navbar__linkTextMobile}>
-                  {item.name}
-                </span>
-              )}
+              {item.icon ? <Image src={item.icon} alt={item.name} width={24} height={24} className={styles.navbar__iconMobile} /> : <span className={styles.navbar__linkTextMobile}>{item.name}</span>}
             </Link>
           </li>
         ))}
@@ -172,23 +133,11 @@ export default function Navbar() {
         <div className={styles.navbar__modal}>
           <div className={styles.navbar__modalContent}>
             <h2 style={{ marginBottom: "1rem" }}>Sign in with Google</h2>
-            <button
-              type="button"
-              className={styles.navbar__signup}
-              onClick={handleLoginRedirect}
-            >
-              <Image
-                src="/icons/google.svg"
-                width={25}
-                height={25}
-                alt="google logo"
-              />
+            <button type="button" className={styles.navbar__signup} onClick={handleLoginRedirect}>
+              <Image src="/icons/google.svg" width={25} height={25} alt="google logo" />
               Continue with Google
             </button>
-            <button
-              onClick={() => setShowLoginModal(false)}
-              className={styles.navbar__cancelButton}
-            >
+            <button onClick={() => setShowLoginModal(false)} className={styles.navbar__cancelButton}>
               Cancel
             </button>
           </div>

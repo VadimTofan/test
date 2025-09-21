@@ -1,16 +1,16 @@
 "use client";
 
 import styles from "./page.module.css";
-import Image from "next/image";
-
-import FetchUserData from "./components/DBFunctions/FetchUserData";
 import useFetchUserPetData from "./components/DBFunctions/FetchUserPetData";
+import FetchUserData from "./components/DBFunctions/FetchUserData";
+
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/app/providers";
-export default function ProfilePage() {
+import Link from "next/link";
+import Image from "next/image";
 
+export default function ProfilePage() {
   const router = useRouter();
   const { user: userprofile, loading: loading } = useAuth();
 
@@ -63,7 +63,7 @@ export default function ProfilePage() {
       el.removeEventListener("touchend", onTouchEnd);
     };
   }, [index, count]);
- 
+
   if (isAuthed === false) {
     return (
       <section className={styles.profile}>

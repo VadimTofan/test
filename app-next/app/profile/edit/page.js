@@ -2,13 +2,12 @@
 
 import styles from "./page.module.css";
 import FetchUserData from "../components/DBFunctions/FetchUserData";
+import api from "@/lib/api";
 
 import { useState, useEffect } from "react";
-//import { useSession, signIn } from "next-auth/react";
 import { useAuth } from "@/app/providers";
 import Image from "next/image";
 import Link from "next/link";
-import api from "@/lib/api";
 
 export default function SignupPage() {
   const today = new Date().toISOString().slice(0, 10);

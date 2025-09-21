@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import api from "@/lib/api";
+
+import { useState, useEffect } from "react";
 
 export default function FetchUserData(email) {
   const [user, setUser] = useState(null);
@@ -22,11 +23,10 @@ export default function FetchUserData(email) {
       setIsLoading(true);
       setError(null);
       try {
-        // adjust the path if your backend uses a different route
         const data = await api(`/api/users/${encodeURIComponent(email)}`, {
           cache: "no-store",
         });
-        if (!cancel) setUser(data); // if your API returns { user }, use: setUser(data.user)
+        if (!cancel) setUser(data);
       } catch (e) {
         if (!cancel) setError(e.message || "Failed to fetch user");
       } finally {

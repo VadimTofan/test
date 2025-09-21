@@ -1,8 +1,9 @@
 "use client";
 
+import { countries } from "./countries";
+
 import Select from "react-select";
 import Image from "next/image";
-import { countries } from "./countries";
 
 const options = countries.map((country) => ({
   value: country.code,

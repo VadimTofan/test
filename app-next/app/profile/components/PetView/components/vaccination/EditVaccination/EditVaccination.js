@@ -1,11 +1,11 @@
 "use client";
 
 import styles from "./EditVaccination.module.css";
+import api from "@/lib/api";
+
 import { useEffect, useState } from "react";
-import api from "@/lib/api"; // or "@/app/lib/api" if that's where your file is
 
-export default function EditVaccination({ open, onClose, vaccination,  onSaved }) {
-
+export default function EditVaccination({ open, onClose, vaccination, onSaved }) {
   const [form, setForm] = useState({
     vaccine_name: "",
     date_administered: "",
@@ -65,8 +65,6 @@ export default function EditVaccination({ open, onClose, vaccination,  onSaved }
 
     try {
       setSaving(true);
-
-      // Use api() so cookies (session) are included automatically
       await api(`/api/vaccinations/${encodeURIComponent(vaccination.id)}`, {
         method: "PATCH",
         body: JSON.stringify(payload),
@@ -95,57 +93,27 @@ export default function EditVaccination({ open, onClose, vaccination,  onSaved }
         <div className={styles.vaccination__body}>
           <div className={styles.vaccination__row}>
             <label>Vaccine name*</label>
-            <input
-              name="vaccine_name"
-              value={form.vaccine_name}
-              onChange={onChange}
-              required
-              className={styles.vaccination__field}
-            />
+            <input name="vaccine_name" value={form.vaccine_name} onChange={onChange} required className={styles.vaccination__field} />
           </div>
 
           <div className={styles.vaccination__row}>
             <label>Date administered*</label>
-            <input
-              type="date"
-              name="date_administered"
-              value={form.date_administered}
-              onChange={onChange}
-              required
-              className={styles.vaccination__field}
-            />
+            <input type="date" name="date_administered" value={form.date_administered} onChange={onChange} required className={styles.vaccination__field} />
           </div>
 
           <div className={styles.vaccination__row}>
             <label>Next due</label>
-            <input
-              type="date"
-              name="next_due"
-              value={form.next_due}
-              onChange={onChange}
-              className={styles.vaccination__field}
-            />
+            <input type="date" name="next_due" value={form.next_due} onChange={onChange} className={styles.vaccination__field} />
           </div>
 
           <div className={styles.vaccination__row}>
             <label>Veterinarian</label>
-            <input
-              name="veterinarian"
-              value={form.veterinarian}
-              onChange={onChange}
-              className={styles.vaccination__field}
-            />
+            <input name="veterinarian" value={form.veterinarian} onChange={onChange} className={styles.vaccination__field} />
           </div>
 
           <div className={styles.vaccination__row}>
             <label>Notes</label>
-            <textarea
-              name="notes"
-              value={form.notes}
-              onChange={onChange}
-              rows={3}
-              className={styles.vaccination__field}
-            />
+            <textarea name="notes" value={form.notes} onChange={onChange} rows={3} className={styles.vaccination__field} />
           </div>
 
           {err && <p className={styles.vaccination__error}>{err}</p>}

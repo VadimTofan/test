@@ -4,7 +4,7 @@ import styles from "./VaccinationForm.module.css";
 
 import FetchUserData from "@/app/profile/components/DBFunctions/FetchUserData";
 import { useAuth } from "@/app/providers";
-import api from "@/lib/api"; // change to "@/app/lib/api" if that's where your file is
+import api from "@/lib/api";
 
 import { useEffect, useState } from "react";
 
@@ -26,17 +26,12 @@ export default function VaccinationForm({ petId, onCreated }) {
   const [err, setErr] = useState("");
   const [ok, setOk] = useState("");
 
-  // Pre-fill veterinarian from DB user (fallback to auth user)
   useEffect(() => {
-    const name =
-      dbUser?.full_name ||
-      authUser?.full_name ||
-      authUser?.name ||
-      "";
+    const name = dbUser?.full_name || authUser?.full_name || authUser?.name || "";
     if (name && !form.veterinarian) {
       setForm((s) => ({ ...s, veterinarian: name }));
     }
-  }, [dbUser, authUser]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [dbUser, authUser]);
 
   if (!petId) return <p className={styles.vaccination__error}>Missing pet id.</p>;
 
@@ -44,12 +39,14 @@ export default function VaccinationForm({ petId, onCreated }) {
   if (!authUser) {
     const handleLogin = () => {
       localStorage.setItem("returnTo", `/profile/pets/${petId}`);
-      window.location.href = "/auth/google"; // use relative path if you added Next rewrites
+      window.location.href = "/auth/google";
     };
     return (
       <div>
         <p>You have to log in first</p>
-        <button className={styles.vaccination__button} onClick={handleLogin}>Login with Google</button>
+        <button className={styles.vaccination__button} onClick={handleLogin}>
+          Login with Google
+        </button>
       </div>
     );
   }
@@ -69,7 +66,6 @@ export default function VaccinationForm({ petId, onCreated }) {
       return;
     }
 
-    // Basic date validations
     const todayStr = new Date().toISOString().slice(0, 10);
     if (form.date_administered > todayStr) {
       setErr("Date administered cannot be in the future.");
@@ -120,66 +116,24 @@ export default function VaccinationForm({ petId, onCreated }) {
         <div className={styles.vaccination__block}>
           <div className={styles.vaccination__row}>
             <label htmlFor="vaccine_name">Vaccine name*</label>
-            <input
-              id="vaccine_name"
-              name="vaccine_name"
-              value={form.vaccine_name}
-              onChange={onChange}
-              className={styles.vaccination__field}
-              required
-            />
+            <input id="vaccine_name" name="vaccine_name" value={form.vaccine_name} onChange={onChange} className={styles.vaccination__field} required />
           </div>
-
-          {/* If you want the user to be able to change administered date, add this input: */}
-          {/* 
-          <div className={styles.vaccination__row}>
-            <label htmlFor="date_administered">Date administered*</label>
-            <input
-              id="date_administered"
-              type="date"
-              name="date_administered"
-              value={(form.date_administered ?? "").slice(0, 10)}
-              onChange={onChange}
-              className={styles.vaccination__field}
-              required
-            />
-          </div>
-          */}
 
           <div className={styles.vaccination__row}>
             <label htmlFor="next_due">Next due</label>
-            <input
-              id="next_due"
-              type="date"
-              name="next_due"
-              value={(form.next_due ?? "").slice(0, 10)}
-              onChange={onChange}
-              className={styles.vaccination__field}
-            />
+            <input id="next_due" type="date" name="next_due" value={(form.next_due ?? "").slice(0, 10)} onChange={onChange} className={styles.vaccination__field} />
           </div>
         </div>
 
         <div className={styles.vaccination__row}>
           <label htmlFor="notes">Notes</label>
-          <textarea
-            id="notes"
-            name="notes"
-            value={form.notes}
-            onChange={onChange}
-            rows={3}
-            className={styles.vaccination__field}
-          />
+          <textarea id="notes" name="notes" value={form.notes} onChange={onChange} rows={3} className={styles.vaccination__field} />
         </div>
 
         {err && <p className={styles.vaccination__error}>{err}</p>}
         {ok && <p className={styles.vaccination__ok}>{ok}</p>}
 
-        <button
-          type="button"
-          className={styles.vaccination__button}
-          onClick={onSubmit}
-          disabled={loading}
-        >
+        <button type="button" className={styles.vaccination__button} onClick={onSubmit} disabled={loading}>
           {loading ? "Saving…" : "Save"}
         </button>
       </div>

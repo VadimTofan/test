@@ -5,10 +5,10 @@ import styles from "./AddVaccination.module.css";
 import ListVaccination from "../ListVaccination/VaccinationList";
 import FormVaccination from "../FormVaccination/FormVaccination";
 import EditVaccination from "../EditVaccination/EditVaccination";
+import api from "@/lib/api";
 
 import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/app/providers";
-import api from "@/lib/api"; // or "@/app/lib/api" if that's where your file is
 
 export default function AddVaccination({ petId }) {
   const { user } = useAuth();
@@ -20,8 +20,6 @@ export default function AddVaccination({ petId }) {
 
   const [editOpen, setEditOpen] = useState(false);
   const [editing, setEditing] = useState(null);
-
-
 
   const load = useCallback(async () => {
     if (!petId) {
@@ -70,7 +68,7 @@ export default function AddVaccination({ petId }) {
 
       {!loading && !err && (
         <>
-          {isAdmin && <FormVaccination petId={petId}  onCreated={load} />}
+          {isAdmin && <FormVaccination petId={petId} onCreated={load} />}
           <ListVaccination items={items} canEdit={isAdmin} onEdit={handleEdit} onDelete={handleDelete} />
 
           {editOpen && editing && (

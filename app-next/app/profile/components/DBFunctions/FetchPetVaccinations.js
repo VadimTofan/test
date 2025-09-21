@@ -1,5 +1,6 @@
+import api from "@/lib/api";
+
 import { useState, useEffect } from "react";
-import api from "@/lib/api"; 
 
 export default function useVaccinationData(petId) {
   const [vaccinations, setVaccinations] = useState([]);
@@ -20,11 +21,8 @@ export default function useVaccinationData(petId) {
       setIsLoading(true);
       setError("");
       try {
-        const data = await api(
-          `/api/pets/${encodeURIComponent(petId)}/vaccinations`,
-          { cache: "no-store" }
-        );
-        const list = Array.isArray(data) ? data : (data.vaccinations || []);
+        const data = await api(`/api/pets/${encodeURIComponent(petId)}/vaccinations`, { cache: "no-store" });
+        const list = Array.isArray(data) ? data : data.vaccinations || [];
         if (!cancel) setVaccinations(list);
       } catch (e) {
         if (!cancel) setError(e?.message || "Failed to fetch vaccinations");
