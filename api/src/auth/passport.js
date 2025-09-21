@@ -2,15 +2,15 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import * as db from "../database/users.js";
 
-if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET || !process.env.PUBLIC_BASE_URL) {
-  console.warn("[auth] Missing GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET/PUBLIC_BASE_URL");
+if (!process.env.GOOGLE_CLIENT_ID || !process.env.SESSION_SECRET || !process.env.PUBLIC_BASE_URL) {
+  console.warn("[auth] Missing GOOGLE_CLIENT_ID/SESSION_SECRET/PUBLIC_BASE_URL");
 }
 
 passport.use(
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientSecret: process.env.SESSION_SECRET,
       callbackURL: `${process.env.PUBLIC_BASE_URL}/auth/google/callback`,
     },
     async (_accessToken, _refreshToken, profile, done) => {
