@@ -1,0 +1,103 @@
+.vaccination {
+  overflow-x: auto;
+}
+
+.vaccination__table {
+  width: 100%;
+  min-height: 25vh;
+  border-collapse: collapse;
+  background: var(--bg);
+  border-radius: 12px;
+}
+
+.vaccination__info {
+  color: var(--ink);
+}
+
+.vaccination__table th,
+.vaccination__table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--card);
+  text-align: left;
+}
+
+.vaccination__table th {
+  background: var(--card);
+  font-weight: 600;
+}
+
+.vaccination__actions {
+  width: 120px;
+}
+
+.vaccination__notes {
+  max-width: 320px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vaccination__action {
+  white-space: nowrap;
+}
+
+.vaccination__buttonLink {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #1f2937;
+  text-decoration: underline;
+}
+
+.vaccination__separator {
+  margin: 0 6px;
+  color: var(--ink);
+}
+
+.vaccination__buttonDanger {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--danger);
+  text-decoration: underline;
+}
+
+.vaccination__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 12px;
+}
+
+.vaccination__summary {
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.vaccination__controls {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.vaccination__buttonPage {
+  border: 1px solid var(--bg);
+  background: var(--card);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.vaccination__buttonPage:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.vaccination__isActive {
+  border-color: var(--ink);
+  font-weight: 600;
+}

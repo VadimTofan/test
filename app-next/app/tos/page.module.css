@@ -1,0 +1,90 @@
+.tos {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--ink);
+}
+.tos__header {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: var(--ink);
+}
+
+.tos__intro {
+  font-size: 1rem;
+  margin-bottom: 30px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.tos__list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.tos__item {
+  background-color: var(--card);
+  border-radius: 12px;
+  border: 1px solid var(--focus);
+  padding: 15px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.tos__item:hover {
+  background-color: var(--card);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.tos__title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+
+.icon {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--ink);
+  transition: transform 0.2s ease-in-out;
+}
+
+.open .icon {
+  transform: rotate(180deg);
+  color: var(--ink);
+}
+
+.sectionContent {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--card);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--ink);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.conclusion {
+  margin-top: 30px;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ink);
+}

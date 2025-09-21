@@ -1,0 +1,78 @@
+.faq {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--ink);
+}
+
+.faq__title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  font-weight: bold;
+  color: var(--ink);
+}
+
+.faq__list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.faq__item {
+  background-color: var(--card);
+  border-radius: 12px;
+  border: 1px solid var(--focus);
+  padding: 15px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.faq__item:hover {
+  background-color: #f1f1f1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.faq__question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+
+.faq__icon {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--ink);
+  transition: transform 0.2s ease-in-out;
+}
+
+.faq__open .icon {
+  transform: rotate(180deg);
+  color: #333;
+}
+
+.faq__answer {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--focus);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--ink);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Smooth fade-in effect */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

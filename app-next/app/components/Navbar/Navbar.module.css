@@ -1,0 +1,241 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 70px;
+  background: var(--ink);
+  z-index: 100;
+}
+
+.navbar__logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.navbar__logoImg {
+  width: 50px;
+  height: 50px;
+}
+
+.navbar__logoText {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--lime);
+}
+
+.navbar__container {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.navbar__items {
+  display: flex;
+  align-items: center;
+  gap: 5rem;
+}
+
+.navbar__link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.navbar__linkText {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--lime);
+}
+
+.navbar__linkText:hover {
+  text-decoration: underline;
+}
+
+.navbar__loginButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--lime);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.navbar__loginButton:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+
+.navbar__itemsMobile {
+  display: none;
+}
+
+.navbar__image {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.navbar__profile {
+  position: relative;
+}
+
+.navbar__dropdown {
+  position: absolute;
+  top: calc(100% + 15px);
+  left: calc(50% - 30px);
+  transform: translateX(-50%);
+  background-color: var(--ink);
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  min-width: 150px;
+  z-index: 1100;
+}
+
+.navbar__button {
+  background: none;
+  border: none;
+  width: 150px;
+  color: var(--bg);
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.navbar__button:hover {
+  text-decoration: underline;
+}
+
+.navbar__modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.navbar__modalContent {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg);
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.navbar__signup {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #fff;
+  color: #3c4043;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3), 0 4px 8px rgba(60, 64, 67, 0.15);
+}
+
+.navbar__signup:hover {
+  background-color: #f7f8f8;
+  box-shadow: 0 2px 4px rgba(60, 64, 67, 0.3), 0 6px 10px rgba(60, 64, 67, 0.15);
+}
+
+.navbar__signup:active {
+  background-color: #eee;
+}
+
+.navbar__signup img {
+  width: 20px;
+  height: 20px;
+}
+
+.navbar__cancelButton {
+  margin-top: 1rem;
+  background-color: #ccc;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 1rem;
+    height: 60px;
+    justify-content: space-between;
+  }
+
+  .navbar__dropdown {
+    top: calc(100% + 10px);
+  }
+
+  .navbar__items {
+    display: none;
+  }
+
+  .navbar__container {
+    gap: 0.75rem;
+  }
+
+  .navbar__loginButton {
+    padding: 0.45rem 0.8rem;
+    border-radius: 8px;
+    font-weight: 700;
+  }
+
+  .navbar__itemsMobile {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    height: 60px;
+    background: var(--ink);
+    border-top: 1px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    z-index: 100;
+  }
+
+  .navbar__loginText {
+    display: none;
+  }
+
+  .navbar__linkMobile {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #374151;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .navbar__iconMobile {
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+}

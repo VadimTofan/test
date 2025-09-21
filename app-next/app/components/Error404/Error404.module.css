@@ -1,0 +1,41 @@
+.error {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  gap: 2rem;
+  margin: 0 10rem;
+  height: 80vh;
+}
+
+.error__image {
+  max-height: 30rem;
+  object-fit: cover;
+  max-width: 20rem;
+}
+
+.error__header {
+  font-weight: 900;
+  font-size: 50px;
+  color: var(--muted);
+}
+
+.error__text {
+  font-weight: 700;
+  color: var(--muted);
+}
+
+@media (max-width: 1024px) {
+  .error {
+    flex-direction: column;
+    margin: 3rem;
+  }
+
+  .error__image {
+    max-height: 25rem;
+  }
+
+  .error__header {
+    font-size: 30px;
+  }
+}
