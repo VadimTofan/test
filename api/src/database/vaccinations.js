@@ -9,7 +9,6 @@ export async function getVaccinationById(id) {
   return vaccination;
 }
 
-//Add
 export async function addVaccination(petId, vaccinationData) {
   const [newVaccination] = await dbClient("vaccinations")
     .insert({
@@ -24,13 +23,11 @@ export async function addVaccination(petId, vaccinationData) {
   return newVaccination;
 }
 
-// Update
 export async function updateVaccination(id, updates) {
   const [updated] = await dbClient("vaccinations").where({ id }).update(updates).returning("*");
   return updated;
 }
 
-// Delete
 export async function deleteVaccination(id) {
   return dbClient("vaccinations").where({ id }).del();
 }

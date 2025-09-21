@@ -1,11 +1,11 @@
 import express from "express";
 import * as db from "../database/vaccinations.js";
-import { requireAuth,requireRole } from '../middlewares/auth.js';
+
+import { requireAuth, requireRole } from "../middlewares/auth.js";
+
 const router = express.Router();
 
-// GET
-
-router.get("/pets/:petId/vaccinations",requireAuth, async (req, res) => {
+router.get("/pets/:petId/vaccinations", requireAuth, async (req, res) => {
   try {
     const { petId } = req.params;
     if (!petId) return res.status(400).send({ error: `No petId is provided` });
@@ -18,26 +18,23 @@ router.get("/pets/:petId/vaccinations",requireAuth, async (req, res) => {
   }
 });
 
-// POST
-router.post("/pets/:petId/vaccinations",requireAuth, requireRole('admin'), async (req, res) => {
+router.post("/pets/:petId/vaccinations", requireAuth, requireRole("admin"), async (req, res) => {
   try {
     const { petId } = req.params;
     const { vaccine_name, date_administered, next_due, veterinarian, notes } = req.body;
 
-    // required fields
     if (!vaccine_name || !date_administered) {
       return res.status(400).json({ error: "vaccine_name and date_administered are required" });
     }
 
     const payload = {
       vaccine_name: String(vaccine_name).trim(),
-      date_administered, 
+      date_administered,
       next_due: next_due || null,
       veterinarian: veterinarian ? String(veterinarian).trim() : null,
       notes: notes ? String(notes).trim() : null,
     };
 
-    // validation: dates
     const today = new Date().toISOString().slice(0, 10);
     if (payload.date_administered > today) {
       return res.status(400).json({ error: "Date administered cannot be in the future." });
@@ -54,8 +51,7 @@ router.post("/pets/:petId/vaccinations",requireAuth, requireRole('admin'), async
   }
 });
 
-// Update
-router.patch("/vaccinations/:id",requireAuth, requireRole('admin'), async (req, res) => {
+router.patch("/vaccinations/:id", requireAuth, requireRole("admin"), async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -77,8 +73,7 @@ router.patch("/vaccinations/:id",requireAuth, requireRole('admin'), async (req, 
   }
 });
 
-// DELETE
-router.delete("/vaccinations/:id",requireAuth, requireRole('admin'), async (req, res) => {
+router.delete("/vaccinations/:id", requireAuth, requireRole("admin"), async (req, res) => {
   try {
     const { id } = req.params;
     const exists = await db.getVaccinationById(id);
